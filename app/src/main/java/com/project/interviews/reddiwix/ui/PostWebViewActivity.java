@@ -10,7 +10,7 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.project.interviews.reddiwix.R;
-import com.project.interviews.reddiwix.Utils.SharedPrefsManager;
+import com.project.interviews.reddiwix.Utils.FavoritesManager;
 import com.project.interviews.reddiwix.Utils.network.NetworkManager;
 import com.project.interviews.reddiwix.datamodel.T3post;
 
@@ -28,7 +28,9 @@ public class PostWebViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         setContentView(R.layout.activity_post_web_view);
         initUiRefs();
@@ -53,8 +55,8 @@ public class PostWebViewActivity extends AppCompatActivity {
 
     //region Private Methods
     private void initUiRefs() {
-        mMainView = (WebView) findViewById(R.id.post_web_view);
-        favoriteFloatingActionButton = (FloatingActionButton) findViewById(R.id.post_fav_btn);
+        mMainView = findViewById(R.id.post_web_view);
+        favoriteFloatingActionButton = findViewById(R.id.post_fav_btn);
     }
 
     private void getPostFromIntent() {
@@ -63,7 +65,7 @@ public class PostWebViewActivity extends AppCompatActivity {
 
     private void setupFavButton() {
         //set initial state of fav btn
-        mIsPostFav = SharedPrefsManager.getInstance(this).isFavPost(mPost.getId());
+        mIsPostFav = FavoritesManager.getInstance(this).isFavPost(mPost.getId());
         if (mIsPostFav) {
             favoriteFloatingActionButton.setSelected(true);
         } else {
@@ -76,10 +78,10 @@ public class PostWebViewActivity extends AppCompatActivity {
                 favoriteFloatingActionButton.setSelected(!favoriteFloatingActionButton.isSelected());
                 if (mIsPostFav) {
                     mIsPostFav = false;
-                    SharedPrefsManager.getInstance(PostWebViewActivity.this).removeFavPost(mPost.getId());
+                    FavoritesManager.getInstance(PostWebViewActivity.this).removeFavPost(mPost.getId());
                 } else {
                     mIsPostFav = true;
-                    SharedPrefsManager.getInstance(PostWebViewActivity.this).insertNewFavPost(mPost);
+                    FavoritesManager.getInstance(PostWebViewActivity.this).insertNewFavPost(mPost);
                 }
             }
         });

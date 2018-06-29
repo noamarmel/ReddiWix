@@ -10,21 +10,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SharedPrefsManager {
+public class FavoritesManager {
 
     //region Const's
     private static final String FAV_FILE_NAME = "com.project.interviews.reddiwix.favpostfile";
     //endregion
 
     //region Singleton
-    private static SharedPrefsManager sInstance = null;
-    private static Object sMutex = new Object();
+    private static FavoritesManager sInstance = null;
+    private static final Object sMutex = new Object();
 
-    public static SharedPrefsManager getInstance(Context context) {
+    public static FavoritesManager getInstance(Context context) {
         if (sInstance == null) {
             synchronized (sMutex) {
                 if (sInstance == null) {
-                    sInstance = new SharedPrefsManager(context);
+                    sInstance = new FavoritesManager(context);
                 }
             }
         }
@@ -34,7 +34,6 @@ public class SharedPrefsManager {
     //endregion
 
     //region Data Members
-    private Context mContext;
     private SharedPreferences mSharedPrefs;
     private HashMap<String, T3post> mCachedPosts;
 
@@ -42,9 +41,8 @@ public class SharedPrefsManager {
     //endregion
 
     //region C'tor
-    private SharedPrefsManager(Context context) {
-        mContext = context;
-        mSharedPrefs = mContext.getSharedPreferences(FAV_FILE_NAME, Context.MODE_PRIVATE);
+    private FavoritesManager(Context context) {
+        mSharedPrefs = context.getSharedPreferences(FAV_FILE_NAME, Context.MODE_PRIVATE);
         mCachedPosts = new HashMap<>();
         retrieveFavPostArrayFromSharedPrefs();
     }
@@ -59,7 +57,7 @@ public class SharedPrefsManager {
     }
 
     public ArrayList<T3post> getFavPosts() {
-        return new ArrayList<T3post>(mCachedPosts.values());
+        return new ArrayList<>(mCachedPosts.values());
     }
 
     public void removeFavPost(String postId) {

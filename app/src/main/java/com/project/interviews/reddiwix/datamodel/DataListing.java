@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class ListingData {
+public class DataListing {
     //region Data Members
     @SerializedName("children")
     private ArrayList<T3post> mPosts;

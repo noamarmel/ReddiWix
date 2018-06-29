@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.project.interviews.reddiwix.R;
-import com.project.interviews.reddiwix.Utils.SharedPrefsManager;
+import com.project.interviews.reddiwix.Utils.FavoritesManager;
 import com.project.interviews.reddiwix.datamodel.T3post;
 import com.project.interviews.reddiwix.ui.adapters.PostsRVAdapter;
 
@@ -55,15 +55,15 @@ public class FavPostsListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mAdapter.replaceData(SharedPrefsManager.getInstance(getActivity()).getFavPosts());
+        mAdapter.replaceData(FavoritesManager.getInstance(getActivity()).getFavPosts());
     }
     //endregion
 
     //region Private Methods
     private void initUi(@NotNull View root) {
-        ((SwipeRefreshLayout) root.findViewById(R.id.posts_swipe_refresh_layout)).setEnabled(false);
+        (root.findViewById(R.id.posts_swipe_refresh_layout)).setEnabled(false);
 
-        mRecyclerView = (RecyclerView) root.findViewById(R.id.posts_recycler_view);
+        mRecyclerView = root.findViewById(R.id.posts_recycler_view);
         setupRecyclerView();
     }
 

@@ -19,10 +19,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.gson.JsonObject;
 import com.project.interviews.reddiwix.R;
 import com.project.interviews.reddiwix.Utils.network.NetworkManager;
-import com.project.interviews.reddiwix.datamodel.ListingData;
+import com.project.interviews.reddiwix.datamodel.DataListing;
 import com.project.interviews.reddiwix.datamodel.T3post;
 import com.project.interviews.reddiwix.ui.adapters.PostsRVAdapter;
 
@@ -32,7 +31,7 @@ import retrofit2.Call;
 
 public class PostsListFragment extends Fragment {
 
-    //region Consts
+    //region Const's
     private static final String TAG = PostsListFragment.class.getSimpleName();
     //endregion
 
@@ -54,7 +53,7 @@ public class PostsListFragment extends Fragment {
         @Override
         public void onRefresh() {
             if (!mIsRefreshingData) {
-                mSearchView.setIconified(true);
+                closeSearchView();
                 mIsRefreshingData = true;
                 NetworkManager.getInstance().getMostRecentPosts(mNetworkResponseCallback);
             }
@@ -79,18 +78,20 @@ public class PostsListFragment extends Fragment {
                 mSwipeToRefresh.setRefreshing(true);
                 NetworkManager.getInstance().getPostsAfter(mNetworkResponseCallback, mNextListingPageName);
             }
-
         }
     });
 
     private NetworkManager.NetworkResponse mNetworkResponseCallback = new NetworkManager.NetworkResponse() {
         @Override
-        public void onResponse(ListingData data) {
+        public void onResponse(DataListing data) {
             mNextListingPageName = data.getNextListing();
 
+            //refresh request - complete new data - replaces old..
             if (!mIsFetchRequestForPagination) {
                 mAdapter.replaceData(data.getPosts());
-            } else {
+            }
+            //pagination request - insert "older posts"
+            else {
                 mAdapter.insertNewData(data.getPosts());
                 mIsFetchRequestForPagination = false;
             }
@@ -100,10 +101,9 @@ public class PostsListFragment extends Fragment {
         }
 
         @Override
-        public void onFailure(Call<JsonObject> call, Throwable t) {
-
-            Log.e(TAG, "Fetching new posts encountered an error", t);
-            Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
+        public void onFailure(Call<DataListing> call, NetworkManager.NetworkError error) {
+            Log.e(TAG, "Fetching new posts encountered an error" + error.name());
+            Toast.makeText(getActivity(), error.name(), Toast.LENGTH_LONG).show();
             mSwipeToRefresh.setRefreshing(false);
             mIsRefreshingData = false;
         }
@@ -162,10 +162,10 @@ public class PostsListFragment extends Fragment {
                 selectionConsumed = true;
                 break;
             }
-            case R.id.action_search: {
-                selectionConsumed = true;
-                break;
-            }
+//            case R.id.action_search: {
+//                selectionConsumed = true;
+//                break;
+//            }
             default: {
                 selectionConsumed = super.onOptionsItemSelected(item);
                 break;
@@ -178,8 +178,8 @@ public class PostsListFragment extends Fragment {
 
     //region Private Methods
     private void initUi(@NotNull View root) {
-        mRecyclerView = (RecyclerView) root.findViewById(R.id.posts_recycler_view);
-        mSwipeToRefresh = (SwipeRefreshLayout) root.findViewById(R.id.posts_swipe_refresh_layout);
+        mRecyclerView = root.findViewById(R.id.posts_recycler_view);
+        mSwipeToRefresh = root.findViewById(R.id.posts_swipe_refresh_layout);
 
         setupRecyclerView();
     }
@@ -217,6 +217,7 @@ public class PostsListFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String query) {
+                mAdapter.getFilter().filter(query);
                 return false;
             }
         });
@@ -229,7 +230,9 @@ public class PostsListFragment extends Fragment {
         int totalItemCount = mLayoutManager.getItemCount();
         int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
 
+        //not currently refreshing & have a next page to request
         if (!mIsRefreshingData && !TextUtils.isEmpty(mNextListingPageName)) {
+            //making sure scroll direction is up & we are at the end of the list
             if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                     && firstVisibleItemPosition >= 0
                     && totalItemCount >= NetworkManager.FETCH_RESULTS_DEFAULT_LIMIT
@@ -239,6 +242,11 @@ public class PostsListFragment extends Fragment {
         }
 
         return isScrollForPagination;
+    }
+
+    private void closeSearchView() {
+        mSearchView.setQuery("", false);
+        mSearchView.setIconified(true);
     }
     //endregion
 }
