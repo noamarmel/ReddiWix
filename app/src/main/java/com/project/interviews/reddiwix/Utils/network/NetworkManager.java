@@ -91,7 +91,6 @@ public class NetworkManager {
         Callback<DataListing> callbackWrapper = new Callback<DataListing>() {
             @Override
             public void onResponse(Call<DataListing> call, Response<DataListing> response) {
-                Log.d("Test onResponse", Thread.currentThread().getName());
                 if (callbackWeakRef.get() != null) {
                     if (response.isSuccessful()) {
 
@@ -107,7 +106,6 @@ public class NetworkManager {
 
             @Override
             public void onFailure(Call<DataListing> call, Throwable t) {
-                Log.e(TAG, "An error occurred on network response with following message \n" + t.getMessage());
                 if (callbackWeakRef.get() != null) {
                     NetworkError error;
                     if (t instanceof IOException) {
@@ -117,6 +115,10 @@ public class NetworkManager {
                     }
 
                     callbackWeakRef.get().onFailure(call, error);
+                }
+                else
+                {
+                    Log.e(TAG, "An error occurred on network response with following message \n" + t.getMessage());
                 }
             }
         };

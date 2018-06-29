@@ -162,10 +162,6 @@ public class PostsListFragment extends Fragment {
                 selectionConsumed = true;
                 break;
             }
-//            case R.id.action_search: {
-//                selectionConsumed = true;
-//                break;
-//            }
             default: {
                 selectionConsumed = super.onOptionsItemSelected(item);
                 break;
@@ -174,6 +170,13 @@ public class PostsListFragment extends Fragment {
 
         return selectionConsumed;
     }
+
+    @Override
+    public void onPause() {
+        Toast.makeText(getActivity(), "onPause", Toast.LENGTH_SHORT).show();
+        super.onPause();
+    }
+
     //endregion
 
     //region Private Methods

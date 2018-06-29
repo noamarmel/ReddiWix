@@ -17,7 +17,6 @@ import java.util.ArrayList;
 public class DataListingDeserializer implements JsonDeserializer<DataListing> {
     @Override
     public DataListing deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        Log.d("Test Deserialize", Thread.currentThread().getName());
         Gson converter = new Gson();
         converter.serializeNulls();
         JsonObject responseData = json.getAsJsonObject().get("data").getAsJsonObject();
