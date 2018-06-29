@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.project.interviews.reddiwix.R;
 import com.project.interviews.reddiwix.utils.FavoritesManager;
@@ -15,6 +16,7 @@ import com.project.interviews.reddiwix.datamodel.T3post;
 import com.project.interviews.reddiwix.ui.adapters.PostsRVAdapter;
 
 import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Text;
 
 public class FavPostsListFragment extends Fragment {
     //region Consts
@@ -25,6 +27,8 @@ public class FavPostsListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private PostsRVAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
+
+    private TextView mEmptyListMsg;
     //endregion
 
     //region C'tor
@@ -62,6 +66,7 @@ public class FavPostsListFragment extends Fragment {
     private void initUi(@NotNull View root) {
         (root.findViewById(R.id.posts_swipe_refresh_layout)).setEnabled(false);
 
+        mEmptyListMsg = root.findViewById(R.id.post_empty_list);
         mRecyclerView = root.findViewById(R.id.posts_recycler_view);
         setupRecyclerView();
     }
@@ -80,6 +85,20 @@ public class FavPostsListFragment extends Fragment {
                 Intent openPostViewIntent = new Intent(getActivity(), PostWebViewActivity.class);
                 openPostViewIntent.putExtra(T3post.POST_ITEM, item);
                 startActivity(openPostViewIntent);
+            }
+        });
+        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                if (mAdapter.getItemCount() == 0)
+                {
+                    mEmptyListMsg.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    mEmptyListMsg.setVisibility(View.GONE);
+                }
             }
         });
     }

@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.project.interviews.reddiwix.R;
@@ -40,6 +41,7 @@ public class PostsListFragment extends Fragment {
     private boolean mIsFetchRequestForPagination = false;
     private boolean mIsRefreshingData = false;
 
+    private TextView mEmptyListMsg;
     private SearchView mSearchView;
 
     private SwipeRefreshLayout mSwipeToRefresh;
@@ -174,6 +176,7 @@ public class PostsListFragment extends Fragment {
 
     //region Private Methods
     private void initUi(@NotNull View root) {
+        mEmptyListMsg = root.findViewById(R.id.post_empty_list);
         mRecyclerView = root.findViewById(R.id.posts_recycler_view);
         mSwipeToRefresh = root.findViewById(R.id.posts_swipe_refresh_layout);
 
@@ -194,6 +197,18 @@ public class PostsListFragment extends Fragment {
                 Intent openPostViewIntent = new Intent(getActivity(), PostWebViewActivity.class);
                 openPostViewIntent.putExtra(T3post.POST_ITEM, item);
                 startActivity(openPostViewIntent);
+            }
+        });
+
+        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                if (mAdapter.getItemCount() == 0) {
+                    mEmptyListMsg.setVisibility(View.VISIBLE);
+                } else {
+                    mEmptyListMsg.setVisibility(View.GONE);
+                }
             }
         });
 
