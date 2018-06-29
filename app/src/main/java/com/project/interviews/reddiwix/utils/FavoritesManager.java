@@ -1,4 +1,4 @@
-package com.project.interviews.reddiwix.Utils;
+package com.project.interviews.reddiwix.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

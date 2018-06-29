@@ -1,6 +1,4 @@
-package com.project.interviews.reddiwix.Utils.network;
-
-import android.util.Log;
+package com.project.interviews.reddiwix.utils.network;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;

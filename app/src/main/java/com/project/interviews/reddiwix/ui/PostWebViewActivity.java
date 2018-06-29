@@ -10,8 +10,8 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.project.interviews.reddiwix.R;
-import com.project.interviews.reddiwix.Utils.FavoritesManager;
-import com.project.interviews.reddiwix.Utils.network.NetworkManager;
+import com.project.interviews.reddiwix.utils.FavoritesManager;
+import com.project.interviews.reddiwix.utils.network.NetworkManager;
 import com.project.interviews.reddiwix.datamodel.T3post;
 
 public class PostWebViewActivity extends AppCompatActivity {

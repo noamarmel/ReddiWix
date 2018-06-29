@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.project.interviews.reddiwix.R;
-import com.project.interviews.reddiwix.Utils.network.NetworkManager;
+import com.project.interviews.reddiwix.utils.network.NetworkManager;
 import com.project.interviews.reddiwix.datamodel.DataListing;
 import com.project.interviews.reddiwix.datamodel.T3post;
 import com.project.interviews.reddiwix.ui.adapters.PostsRVAdapter;

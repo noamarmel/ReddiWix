@@ -1,4 +1,4 @@
-package com.project.interviews.reddiwix.Utils.network;
+package com.project.interviews.reddiwix.utils.network;
 
 import com.project.interviews.reddiwix.datamodel.DataListing;
 
