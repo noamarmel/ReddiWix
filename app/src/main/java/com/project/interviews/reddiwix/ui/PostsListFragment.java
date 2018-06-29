@@ -170,13 +170,6 @@ public class PostsListFragment extends Fragment {
 
         return selectionConsumed;
     }
-
-    @Override
-    public void onPause() {
-        Toast.makeText(getActivity(), "onPause", Toast.LENGTH_SHORT).show();
-        super.onPause();
-    }
-
     //endregion
 
     //region Private Methods
