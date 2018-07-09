@@ -21,10 +21,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.project.interviews.reddiwix.R;
-import com.project.interviews.reddiwix.utils.network.NetworkManager;
 import com.project.interviews.reddiwix.datamodel.DataListing;
 import com.project.interviews.reddiwix.datamodel.T3post;
 import com.project.interviews.reddiwix.ui.adapters.PostsRVAdapter;
+import com.project.interviews.reddiwix.utils.network.NetworkManager;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -78,8 +78,11 @@ public class PostsListFragment extends Fragment {
                 mIsRefreshingData = true;
                 mIsFetchRequestForPagination = true;
                 mSwipeToRefresh.setRefreshing(true);
+                mRecyclerView.stopScroll();
                 NetworkManager.getInstance().getPostsAfter(mNetworkResponseCallback, mNextListingPageName);
             }
+
+
         }
     });
 
